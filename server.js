@@ -33,3 +33,22 @@ app.get("/oauth/jobber/callback", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+// Example: Get invoices
+app.get("/invoices", async (req, res) => {
+  const token = req.query.token; // You can pass the token in the URL temporarily
+  try {
+    const response = await axios.get("https://api.getjobber.com/api/invoices", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      }
+    });
+
+    res.json(response.data);
+  } catch (err) {
+    res.status(500).json({
+      error: err.response?.data || err.message,
+    });
+  }
+});
